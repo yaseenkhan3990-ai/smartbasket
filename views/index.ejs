@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartBasket</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" type="image/logo" href="https://thumbs.dreamstime.com/b/ai-robot-shopping-cart-icon-ecommerce-retail-store-marketplace-vector-illustration-446380951.jpg" /> 
+  </head>
+  <body>
+    <main class="shell">
+      <nav class="nav">
+        <a class="brand" href="/">
+          <span class="brand-mark">DL</span>
+          <span><bold>DealLens AI</bold></span>
+        </a>
+        <div class="nav-actions">
+          <a class="back-link" href="#analyze">Analyze</a>
+          <a class="back-link" href="#demo">Demo response</a>
+        </div>
+      </nav>
+
+      <section class="hero landing-hero">
+        <div class="hero-copy">
+          <h2 class="" style="font-family: cursive;font-weight: semi-bold;"><bold>SmartBasket</bold></h2>
+          <h1 class="split-heading" data-split-heading>
+            <span>Find the lowest</span>
+            <span>product price across</span>
+            <span>trusted stores.</span>
+          </h1>
+          <p>
+            Paste a product URL or product name. DealLens scans product details, searches matching listings, and returns a structured buying report with platform, price, source URL, and checkout checks.
+          </p>
+
+          <form id="analyze" class="search-panel" action="/analyze" method="POST" data-loading-form>
+            <label for="productUrl">Product link or name</label>
+            <div class="input-row">
+              <input
+                id="productUrl"
+                name="productUrl"
+                type="text"
+                placeholder="Paste Amazon/Flipkart URL or type wireless headphones"
+                autocomplete="off"
+                required
+              />
+              <button type="submit" data-loading-button>Analyze</button>
+            </div>
+            <div class="quick-links">
+              <span>Amazon</span>
+              <span>Flipkart</span>
+              <span>Myntra</span>
+              <span>Croma</span>
+              <span>Shows direct seller URLs</span>
+            </div>
+            <% if (error) { %>
+              <p class="error"><%= error %></p>
+            <% } %>
+          </form>
+        </div>
+
+        <aside class="media-stage" aria-label="Shopping analysis preview">
+          <video
+            class="hero-image" autoplay muted loop playsinline
+            poster="https://m.media-amazon.com/images/G/31/amazonservices/Blog/eCommerce_Platform.png"
+            alt="Online shopping checkout on a laptop">
+            <source src="upload/istockphoto-2182642770-640_adpp_is.mp4" type="video/mp4" />
+        </video>
+
+          <video class="hero-video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=900&q=80">
+            <source src="/upload/istockphoto-1492291415-640_adpp_is.mp4" type="video/mp4" />
+          </video>
+          <svg class="analysis-svg" viewBox="0 0 420 230" role="img" aria-label="AI compares prices from multiple stores">
+            <rect x="24" y="24" width="372" height="182" rx="22" fill="#ffffff" />
+            <path d="M68 76h96M68 114h190M68 152h150" stroke="#000000" stroke-width="14" stroke-linecap="round" />
+            <path d="M296 68l34 34 56-62" fill="none" stroke="#000000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="326" cy="150" r="36" fill="#000000" />
+            <path d="M308 151l14 14 28-34" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <div class="floating-report">
+            <span>Lowest platform</span>
+            <strong>AI verified seller URL</strong>
+            <small>Structured answer after scan</small>
+          </div>
+        </aside>
+      </section>
+
+      <section class="trust-row" aria-label="DealLens capabilities">
+        <div>
+          <strong>Lowest price</strong>
+          <span>Ranks current visible prices from matching product pages.</span>
+        </div>
+        <div>
+          <strong>Product scan</strong>
+          <span>Reads available title, image, description, and price from the link.</span>
+        </div>
+        <div>
+          <strong>Visit links</strong>
+          <span>Every offer includes a URL so shoppers can verify the seller.</span>
+        </div>
+      </section>
+
+      <section class="landing-band">
+        <div>
+          <span class="eyebrow">How it works</span>
+          <h2>From pasted link to buying decision in one clean report.</h2>
+        </div>
+        <div class="steps-grid">
+          <article>
+            <span>01</span>
+            <strong>Read product detail</strong>
+            <p>Extracts title, image, description, visible price, and source store from the submitted product page.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <strong>Search matching sellers</strong>
+            <p>Uses AI web search to compare likely same-product listings across credible ecommerce platforms.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <strong>Return structured answer</strong>
+            <p>Shows lowest platform, visible price, confidence, visit URL, and checkout checks in a scannable format.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="demo" class="response-preview">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Response format</span>
+            <h2>Clear enough to act on.</h2>
+          </div>
+          <p>The analysis page is organized around the decision shoppers need: where to buy, why, and what to verify.</p>
+        </div>
+        <div class="demo-response">
+          <div>
+            <span>Best price</span>
+            <strong>Platform + live price</strong>
+            <small>Direct product URL included</small>
+          </div>
+          <div>
+            <span>AI recommendation</span>
+            <strong>Buy / wait / verify</strong>
+            <small>Reasons and checkout checks</small>
+          </div>
+          <div>
+            <span>Marketplace ranking</span>
+            <strong>Lowest to highest</strong>
+            <small>Visual bars and seller cards</small>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="loading-screen" data-loading-screen aria-live="polite" aria-hidden="true">
+      <div class="loading-card">
+        <div class="loader-ring" aria-hidden="true"></div>
+        <span class="eyebrow">Analyzing deal</span>
+        <h2>Scanning product and finding live offers</h2>
+        <p>DealLens is checking the submitted page, searching matching seller listings, and preparing a structured AI recommendation.</p>
+        <div class="loading-steps">
+          <span>Reading product details</span>
+          <span>Comparing prices</span>
+          <span>Structuring AI advice</span>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

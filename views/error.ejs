@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %> | DealLens AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <nav class="nav">
+        <a class="brand" href="/">
+          <span class="brand-mark">DL</span>
+          <span>DealLens AI</span>
+        </a>
+        <a class="back-link" href="/">Try again</a>
+      </nav>
+
+      <section class="error-page">
+        <span class="eyebrow"><%= statusCode %> error</span>
+        <h1><%= title %></h1>
+        <p><%= message %></p>
+        <% if (detail) { %>
+          <p class="ai-error"><%= detail %></p>
+        <% } %>
+        <div class="hero-actions">
+          <a class="primary-link" href="/">Analyze another product</a>
+          <a class="secondary-link" href="javascript:history.back()">Go back</a>
+        </div>
+      </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= comparison.productName %> | DealLens AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <% const pricedOffers = comparison.offers.filter((offer) => offer.salePrice > 0); %>
+    <% const maxSalePrice = Math.max(1, ...pricedOffers.map((offer) => offer.salePrice)); %>
+    <% const minSalePrice = pricedOffers.length ? Math.min(...pricedOffers.map((offer) => offer.salePrice)) : 0; %>
+    <% const submittedDelta = Math.max(0, (comparison.submitted.salePrice || 0) - (comparison.best.salePrice || 0)); %>
+    <% const aiReasons = Array.isArray(ai.reasons) ? ai.reasons : []; %>
+    <% const aiChecks = Array.isArray(ai.checks) ? ai.checks : []; %>
+    <% const aiSources = Array.isArray(ai.sources) ? ai.sources : []; %>
+    <main class="shell">
+      <nav class="nav">
+        <a class="brand" href="/">
+          <span class="brand-mark">DL</span>
+          <span>DealLens AI</span>
+        </a>
+        <div class="nav-actions">
+          <a class="back-link" href="<%= comparison.productLink %>" target="_blank" rel="noopener"><%= comparison.productLinkLabel %></a>
+          <a class="back-link" href="/">New analysis</a>
+        </div>
+      </nav>
+
+      <section class="result-hero">
+        <div>
+          <span class="eyebrow"><%= comparison.snapshot.fetched ? "Product page scanned" : "Limited scan" %></span>
+          <h1><%= comparison.productName %></h1>
+          <p>
+            Best current pick: <strong><%= comparison.best.name %></strong> at
+            <strong><%= formatPrice(comparison.best.salePrice) %></strong>.
+            Open the source URL to verify stock, coupons, and delivery charges before checkout.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-link" href="<%= comparison.best.link %>" target="_blank" rel="noopener">View best deal</a>
+            <a class="secondary-link" href="<%= comparison.productLink %>" target="_blank" rel="noopener"><%= comparison.productLinkLabel %></a>
+          </div>
+        </div>
+        <div class="winner-card">
+          <span>Lowest found</span>
+          <strong><%= comparison.best.name %></strong>
+          <em><%= formatPrice(comparison.best.salePrice) %></em>
+          <small>Live source link - <%= comparison.confidence %>% match confidence</small>
+        </div>
+      </section>
+
+      <section class="insight-strip" aria-label="Comparison summary">
+        <div>
+          <span>Best price</span>
+          <strong><%= formatPrice(comparison.best.salePrice) %></strong>
+          <small><%= comparison.best.name %></small>
+        </div>
+        <div>
+          <span>Your link price</span>
+          <strong><%= formatPrice(comparison.submitted.salePrice) %></strong>
+          <small><%= comparison.submitted.name %></small>
+        </div>
+        <div>
+          <span>Extra saving</span>
+          <strong><%= formatCurrency(submittedDelta) %></strong>
+          <small>Against your submitted store</small>
+        </div>
+        <div>
+          <span>Match confidence</span>
+          <strong><%= comparison.confidence %>%</strong>
+          <small><%= comparison.snapshot.fetched ? "Based on scanned page data" : "Based on URL and title match" %></small>
+        </div>
+      </section>
+
+      <section class="product-strip">
+        <div class="product-art">
+          <% if (comparison.snapshot.image) { %>
+            <img src="<%= comparison.snapshot.image %>" alt="<%= comparison.productName %>" />
+          <% } else { %>
+            <span>DL</span>
+          <% } %>
+        </div>
+        <div>
+          <span class="eyebrow">Submitted link</span>
+          <h2><%= comparison.snapshot.source %></h2>
+          <p>
+            <% if (comparison.snapshot.price) { %>
+              Extracted page price: <strong><%= formatPrice(comparison.snapshot.price) %></strong>.
+            <% } else { %>
+              Price was not visible in the page HTML.
+            <% } %>
+            <%= comparison.snapshot.description || "DealLens used the page title and URL to identify the product." %>
+          </p>
+          <% if (comparison.snapshot.warning) { %>
+            <p class="warning"><%= comparison.snapshot.warning %></p>
+          <% } %>
+          <a class="inline-product-link" href="<%= comparison.productLink %>" target="_blank" rel="noopener"><%= comparison.productLinkLabel %></a>
+        </div>
+      </section>
+
+      <section class="ai-panel">
+        <div class="recommendation-copy">
+          <span class="eyebrow"><%= ai.statusLabel %></span>
+          <h2>Structured AI response</h2>
+          <% if (ai.error) { %>
+            <p class="ai-error"><%= ai.error %></p>
+          <% } %>
+          <h3><%= ai.verdict %></h3>
+          <p><%= ai.summary %></p>
+          <div class="ai-lists">
+            <div>
+              <strong>Why this pick</strong>
+              <ul>
+                <% aiReasons.forEach((reason) => { %>
+                  <li><%= reason %></li>
+                <% }) %>
+              </ul>
+            </div>
+            <div>
+              <strong>Before checkout</strong>
+              <ul>
+                <% aiChecks.forEach((check) => { %>
+                  <li><%= check %></li>
+                <% }) %>
+              </ul>
+            </div>
+          </div>
+          <% if (aiSources.length) { %>
+            <div class="source-list" aria-label="AI web sources">
+              <strong>AI search sources</strong>
+              <% aiSources.forEach((source) => { %>
+                <a href="<%= source.url %>" target="_blank" rel="noopener"><%= source.title %></a>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+        <div class="decision-card">
+          <span>Buy from</span>
+          <strong><%= comparison.best.name %></strong>
+          <small><%= formatPrice(comparison.best.salePrice) %> visible price</small>
+          <a class="offer-action compact" href="<%= comparison.best.link %>" target="_blank" rel="noopener">Open deal</a>
+        </div>
+      </section>
+
+      <section class="visual-compare" aria-label="Visual price comparison">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Visual comparison</span>
+            <h2>Marketplace price ranking</h2>
+          </div>
+          <p>Shorter bars mean a lower visible web price. Every row links to the source page found by AI search.</p>
+        </div>
+        <div class="bar-list">
+          <% comparison.offers.forEach((offer, index) => { %>
+            <% const barWidth = offer.salePrice > 0 ? Math.max(14, Math.round((offer.salePrice / maxSalePrice) * 100)) : 14; %>
+            <a class="bar-row <%= index === 0 ? "best" : "" %>" href="<%= offer.link %>" target="_blank" rel="noopener">
+              <div class="bar-label">
+                <strong><%= offer.name %></strong>
+                <span><%= index === 0 ? "Best deal" : offer.isSubmitted ? "Your link" : "Search match" %></span>
+              </div>
+              <div class="bar-track">
+                <span style="width: <%= barWidth %>%"></span>
+              </div>
+              <div class="bar-price">
+                <strong><%= formatPrice(offer.salePrice) %></strong>
+                <small><%= offer.verified ? "Source link" : "Search link" %></small>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+      </section>
+
+      <section class="comparison-grid">
+        <% comparison.offers.forEach((offer, index) => { %>
+          <article class="offer-card <%= index === 0 ? "best" : "" %>">
+            <div class="offer-head">
+              <div>
+              <span class="rank">#<%= index + 1 %></span>
+                <h3><%= offer.name %></h3>
+              </div>
+              <% if (offer.isSubmitted) { %>
+                <span class="submitted">Your link</span>
+              <% } else { %>
+                <span class="submitted soft">Search</span>
+              <% } %>
+            </div>
+            <div class="price-line">
+                <strong><%= formatPrice(offer.salePrice) %></strong>
+              <span><%= offer.listedPrice > offer.salePrice ? formatCurrency(offer.listedPrice) : offer.availability %></span>
+            </div>
+            <div class="offer-meter" aria-label="Relative price">
+              <span style="width: <%= offer.salePrice > 0 ? Math.max(14, Math.round((offer.salePrice / maxSalePrice) * 100)) : 14 %>%"></span>
+            </div>
+            <div class="discount-row">
+              <span><%= offer.availability %></span>
+              <span><%= offer.savings > 0 ? "Save " + formatCurrency(offer.savings) : "Compare source" %></span>
+            </div>
+            <p><%= offer.tone %></p>
+            <dl class="offer-details">
+              <div>
+                <dt>Status</dt>
+                <dd><%= offer.verified ? "Direct source" : "Search source" %></dd>
+              </div>
+              <div>
+                <dt>Difference</dt>
+                <dd><%= index === 0 || !offer.salePrice ? "Lowest" : "+" + formatCurrency(offer.salePrice - minSalePrice) %></dd>
+              </div>
+            </dl>
+            <a class="offer-action" href="<%= offer.link %>" target="_blank" rel="noopener"><%= offer.isSubmitted ? "Open pasted product" : "Visit seller URL" %></a>
+          </article>
+        <% }) %>
+      </section>
+
+      <section class="note">
+        DealLens uses OpenAI live web search to find matching product pages and visible prices. Always open the source link before checkout because store prices, coupons, delivery fees, and stock can change.
+      </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
