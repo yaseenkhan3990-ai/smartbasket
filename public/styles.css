@@ -128,9 +128,10 @@ a {
   grid-template-columns: minmax(0, 1.2fr) minmax(300px, 380px);
   gap: 28px;
   align-items: stretch;
-  margin-top: 24px;
+  /* margin-top: 24px; */
   padding: 42px;
-  border-radius: 30px;
+  /* border-radius: 30px; */
+  height: 100vh;
 }
 
 .landing-hero {
